@@ -28,5 +28,7 @@ Transaction Endpoint
     GET/transactions/analytics/categories
     GET/transactions/analytics/top-category
 
+# Installation
 
-    
+pip install fastapi,uvicorn
+pip install sqlalchemy
