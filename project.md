@@ -32,3 +32,5 @@ Transaction Endpoint
 
 pip install fastapi,uvicorn
 pip install sqlalchemy
+pip3 install "passlib[bcrypt]" bcrypt==3.2.0
+pip3 install python-jose
