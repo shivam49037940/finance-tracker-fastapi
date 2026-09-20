@@ -21,7 +21,7 @@ class Transaction(Base):
 
     id: Mapped[int] = mapped_column(Integer,primary_key=True,index=True)
     amount:Mapped[float] = mapped_column(Float)
-    tpe:Mapped[str] = mapped_column(String(200))
+    type:Mapped[str] = mapped_column(String(200))
     category:Mapped[str] = mapped_column(String(200))
     description:Mapped[str] = mapped_column(String(255))
     user_id:Mapped[int] = mapped_column(Integer,ForeignKey("users.id"))
