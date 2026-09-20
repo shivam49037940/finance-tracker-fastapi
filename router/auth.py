@@ -1,9 +1,10 @@
 from fastapi import APIRouter,Depends
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas import UserCreate,UserLogin
 from models import User
-from security import hash_password
+from security import hash_password,verify_password,create_access_token,get_current_user
 
 router = APIRouter(prefix = "/auth",tags=['Authentication'])
 
@@ -26,6 +27,40 @@ def register(user:UserCreate,db:Session=Depends(get_db)):
     return{
         "message":"ser registered successfully",
         "user_id":new_user.id
+    }
+
+
+@router.post('/login')
+def login(user:UserLogin,db:Session=Depends(get_db)):
+
+
+    db_user = db.execute(select (User).where(User.email == user.email)).scalar_one_or_none()
+
+    if not db_user:
+        return {
+            "error":"Invalid credentials"
+        }
+
+    if not verify_password(user.password,db_user.hash_password):
+        return{
+            "error":"Invalid credentials"
+        }
+
+    #generating tokens
+
+    token = create_access_token(db_user.id)
+
+    return {
+        "message":"Login successful",
+        "access_token":token
+    }
+
+@router.get("/me")
+def profile(current_user:User=Depends(get_current_user)):
+    return{
+        "id":current_user.id,
+        "email":current_user.email,
+        "name":current_user.name
     }
 
     
