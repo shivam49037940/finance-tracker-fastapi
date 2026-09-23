@@ -34,3 +34,14 @@ def create_transaction(
         "message":"Transaction added",
         "transaction_id":new_transaction.id
     }
+
+
+@router.get("/all")
+def get_all_transaction(
+    current_user:User=Depends(get_current_user),
+    db:Session=Depends(get_db)
+):
+    transactions = db.execute(select(Transaction).where(Transaction.user_id==current_user.id)).scalars().all()
+
+    return transactions
+
